@@ -8,6 +8,14 @@ import sys
 
 def doseek(f, n):
     try:
+            if sys.platform == 'win32':
+        # Windows raw disks can only be seeked to a multiple of the block size
+        BLOCKSIZE = 512
+        na, nb = divmod(n, BLOCKSIZE)
+        f.seek(na * BLOCKSIZE)
+        if nb:
+            f.read(nb)
+    else:
         f.seek(n)
     except:
         print("[!] unable to seek properly")
